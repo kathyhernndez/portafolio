@@ -1,3 +1,4 @@
+
 /* ===== Variables y Reset ===== */
 :root {
     --primary-color: #6c5ce7;
@@ -240,41 +241,58 @@ body.dark-mode {
 
 /* Menú hamburguesa */
 .hamburger {
-    display: none;
-    width: 30px;
-    height: 30px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 1001;
-    transition: var(--transition);
+  display: none;
+  width: 50px;
+  height: 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: var(--transition);
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius);
+  position: relative;
 }
 
-.hamburger:hover .bar {
-    background-color: var(--accent-color);
+.hamburger:hover {
+  background: rgba(108, 92, 231, 0.1);
+  border-color: var(--primary-color);
 }
 
 .bar {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: var(--dark-color);
-    margin: 3px 0;
-    transition: var(--transition);
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--dark-color);
+  margin: 5px 0;
+  transition: var(--transition);
+  border-radius: 2px;
+  position: relative;
 }
 
+.hamburger:hover .bar {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(108, 92, 231, 0.4);
+}
+
+/* Animación mejorada al activarse */
 .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+  transform: translateY(13px) rotate(45deg);
+  background-color: var(--primary-color);
 }
 
 .hamburger.active .bar:nth-child(2) {
-    opacity: 0;
+  opacity: 0;
+  transform: translateX(-10px);
 }
 
 .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+  transform: translateY(-13px) rotate(-45deg);
+  background-color: var(--primary-color);
 }
+
 
 /* ===== Secciones ===== */
 
@@ -298,10 +316,7 @@ body.dark-mode {
     flex: 1;
 }
 
-.hero-img {
-    flex: 1;
-    text-align: center;
-}
+
 
 .hero h1 {
     font-size: 3.5rem;
@@ -330,6 +345,94 @@ body.dark-mode {
 .hero-btns {
     display: flex;
     gap: 20px;
+}
+
+.hero-img {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.hero-img img {
+    width: 400px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation: morph 8s ease-in-out infinite, glow 3s ease-in-out infinite;
+
+    /* Borde innovador con múltiples capas */
+    box-shadow: 
+        0 0 0 8px rgba(108, 92, 231, 0.3),
+        0 0 0 16px rgba(253, 121, 168, 0.2),
+        0 0 30px rgba(108, 92, 231, 0.5),
+        0 0 60px rgba(253, 121, 168, 0.3),
+        inset 0 0 50px rgba(255, 255, 255, 0.1);
+
+    /* Borde degradado animado */
+    border: 4px solid transparent;
+    background: 
+        linear-gradient(white, white) padding-box,
+        linear-gradient(45deg, 
+            #6c5ce7, 
+            #fd79a8, 
+            #00cec9, 
+            #fdcb6e,
+            #6c5ce7
+        ) border-box;
+    background-size: 300% 300%;
+    animation: gradient-border 4s ease infinite, morph 8s ease-in-out infinite, glow 3s ease-in-out infinite;
+
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hero-img img:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 0 0 12px rgba(108, 92, 231, 0.4),
+        0 0 0 24px rgba(253, 121, 168, 0.3),
+        0 0 50px rgba(108, 92, 231, 0.7),
+        0 0 100px rgba(253, 121, 168, 0.5),
+        inset 0 0 80px rgba(255, 255, 255, 0.2);
+}
+
+/* Animación de morfing del borde */
+@keyframes morph {
+    0%, 100% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+    25% {
+        border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+    }
+    50% {
+        border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+    }
+    75% {
+        border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+    }
+}
+
+/* Animación del degradado del borde */
+@keyframes gradient-border {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Animación de resplandor */
+@keyframes glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(108, 92, 231, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 40px rgba(253, 121, 168, 0.7));
+    }
 }
 
 /* Sobre Mí */
@@ -369,6 +472,10 @@ body.dark-mode .about-img {
 body.dark-mode .about-img img {
     border: none;
     outline: none;
+}
+
+body.dark-mode .about-text p {
+    color: var(--dark-text);
 }
 
 .about-text {
@@ -493,21 +600,44 @@ body.dark-mode .about-img img {
 
 /* Proyectos */
 .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
 .project-card {
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  width: 350px;
+  flex-shrink: 0;
 }
 
 .project-card:hover {
-    transform: translateY(-10px);
+  transform: translateY(-10px);
+}
+
+/* Responsive para tablet */
+@media (max-width: 1024px) {
+  .projects-grid {
+    justify-content: center;
+  }
+}
+
+/* Responsive para mobile */
+@media (max-width: 768px) {
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: unset;
+  }
+
+  .project-card {
+    width: 100%;
+  }
 }
 
 .project-img {
@@ -836,7 +966,7 @@ body.dark-mode .about-img img {
 .game-area {
     width: 100%;
     height: 200px;
-    background: #f5f5f5;
+    background: #cdcdcd;
     position: relative;
     overflow: hidden;
     border-radius: 8px;
@@ -853,7 +983,7 @@ body.dark-mode .about-img img {
     width: 30px;
     height: 30px;
     background: var(--primary-color);
-    color: white;
+    color: rgb(247, 219, 219);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -867,159 +997,384 @@ body.dark-mode .about-img img {
 }
 
 /* ===== Estilos del Footer con Modo Oscuro ===== */
+/* ===== Footer Mejorado ===== */
+
 .footer {
-    background-color: var(--dark-color);
-    color: var(--white);
-    padding: 60px 0 0;
-    transition: var(--transition);
+  background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%);
+  color: var(--white);
+  padding: 80px 0 0;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
 }
 
-body.dark-mode .footer {
-    background-color: var(--dark-bg);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+/* Efecto decorativo de fondo */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  opacity: 0.5;
 }
 
-/* Estilos para el logo en el footer */
-.footer .logo {
-    color: var(--white); /* Siempre blanco en ambos modos */
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1.8rem;
-    text-decoration: none;
-    transition: var(--transition);
-    display: inline-block;
-    margin-bottom: 20px;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 50px;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
 }
 
-body.dark-mode .footer .logo {
-    /* Opcional: ajustar el gradiente para modo oscuro si es necesario */
-    background: linear-gradient(45deg, var(--primary-color), #fd79a8);
-    -webkit-background-clip: text;
-    background-clip: text;
+.footer-about, .footer-links, .footer-contact {
+  animation: fadeInUp 0.6s ease-out;
 }
 
-/* Estilos para los títulos en el footer */
+
 .footer h3 {
-    color: var(--white); /* Blanco en ambos modos */
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    position: relative;
-    padding-bottom: 10px;
-    transition: var(--transition);
+  color: var(--white);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  position: relative;
+  padding-bottom: 12px;
 }
 
 .footer h3::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50px;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: var(--transition);
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  border-radius: 2px;
+  transition: var(--transition);
 }
 
-/* Efecto hover para el logo */
-.footer .logo:hover {
-    transform: scale(1.05);
+.footer-links ul li a:hover ~ h3::after,
+.footer:hover h3::after {
+  width: 100px;
 }
 
-/* Asegurar contraste en modo oscuro */
-body.dark-mode .footer h3,
-body.dark-mode .footer .logo {
-    color: var(--dark-text);
-    opacity: 0.9;
-}
-
-/* Opcional: efecto de brillo en modo oscuro */
-body.dark-mode .footer .logo:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-
-
-.footer-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.footer-about {
-    flex: 2;
-    min-width: 300px;
-}
-
-.footer-about .logo {
-    color: var(--white);
-    margin-bottom: 20px;
-    display: inline-block;
-}
-
-.footer-about p {
-    color: var(--text-light);
-    margin-bottom: 20px;
-}
-
-.footer-links {
-    flex: 1;
-    min-width: 200px;
-}
-
-.footer-links h3 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    position: relative;
-    padding-bottom: 10px;
-    color: var(--white);
-}
-
-.footer-links h3::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50px;
-    height: 2px;
-    background-color: var(--primary-color);
+.footer-links ul {
+  list-style: none;
+  padding: 0;
 }
 
 .footer-links ul li {
-    margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .footer-links ul li a {
-    color: var(--text-light);
-    transition: var(--transition);
+  color: rgba(255, 255, 255, 0.7);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-links ul li a:before {
+  content: '→';
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: var(--transition);
 }
 
 .footer-links ul li a:hover {
-    color: var(--primary-color);
-    padding-left: 5px;
+  color: var(--primary-color);
+  padding-left: 8px;
 }
 
+.footer-links ul li a:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Redes Sociales Mejoradas */
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.social-links a {
+  width: 45px;
+  height: 45px;
+  background: rgba(108, 92, 231, 0.15);
+  border: 2px solid rgba(108, 92, 231, 0.3);
+  color: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-links a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: var(--transition);
+  z-index: -1;
+}
+
+.social-links a:hover {
+  color: var(--white);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
+}
+
+.social-links a:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+/* Footer Bottom Mejorado */
 .footer-bottom {
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 20px 0;
-    text-align: center;
+  background: linear-gradient(90deg, 
+    #fd79a8 0%, 
+    #6c5ce7 25%, 
+    #ffd93d 50%, 
+    #4a90e2 75%, 
+    #fd79a8 100%);
+  padding: 30px 0;
+  text-align: center;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
-
-body.dark-mode .footer-bottom {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-
 
 .footer-bottom p {
-    color: var(--text-light);
-    font-size: 0.9rem;
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  letter-spacing: 0.3px;
 }
+
+.footer-bottom strong {
+  font-weight: 700;
+  color: var(--white);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animación del corazón */
+.heart {
+  display: inline-block;
+  animation: heartBeat 1.5s ease-in-out infinite;
+  font-size: 1.1rem;
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.15);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.15);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive para Mobile */
+@media (max-width: 768px) {
+  .footer-bottom {
+    padding: 25px 20px;
+  }
+
+  .footer-bottom p {
+    font-size: 0.85rem;
+    gap: 4px;
+  }
+
+  .heart {
+    font-size: 1rem;
+  }
+}
+
+/* ===== Footer - Modo Oscuro ===== */
+
+body.dark-mode .footer {
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+  color: var(--dark-text);
+}
+
+body.dark-mode .footer h3 {
+  color: var(--dark-text);
+}
+
+body.dark-mode .footer-about p {
+  color: rgba(230, 230, 230, 0.8);
+}
+
+body.dark-mode .footer-links ul li a {
+  color: rgba(230, 230, 230, 0.7);
+}
+
+body.dark-mode .footer-links ul li a:hover {
+  color: var(--primary-color);
+}
+
+body.dark-mode .social-links a {
+  background: rgba(108, 92, 231, 0.2);
+  border-color: rgba(108, 92, 231, 0.4);
+  color: var(--primary-color);
+}
+
+body.dark-mode .social-links a:hover {
+  color: var(--white);
+  background: rgba(108, 92, 231, 0.3);
+}
+
+body.dark-mode .footer-contact ul li a {
+  color: rgba(230, 230, 230, 0.7);
+}
+
+body.dark-mode .footer-contact ul li a:hover {
+  color: var(--primary-color);
+}
+
+/* Footer Bottom en modo oscuro */
+body.dark-mode .footer-bottom {
+  background: linear-gradient(90deg,
+    #fd79a8 0%,
+    #6c5ce7 25%,
+    #ffd93d 50%,
+    #4a90e2 75%,
+    #fd79a8 100%);
+  color: var(--white);
+}
+
+body.dark-mode .footer-bottom p {
+  color: var(--white);
+}
+
+body.dark-mode .footer-bottom strong {
+  color: var(--white);
+}
+
+/* Back to Top en modo oscuro */
+body.dark-mode .back-to-top {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+body.dark-mode .back-to-top:hover {
+  background: var(--accent-color);
+}
+
+/* Opción alternativa para footer-bottom con menos brillo */
+body.dark-mode .footer-bottom {
+  background: linear-gradient(90deg,
+    #fd79a8 0%,
+    #6c5ce7 25%,
+    #ffd93d 50%,
+    #4a90e2 75%,
+    #fd79a8 100%);
+  opacity: 0.9;
+}
+
+/* ===== Footer - Enlaces en color blanco correcto ===== */
+
+.footer-links ul li a {
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-decoration: none !important;
+}
+
+.footer-contact ul li a {
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-decoration: none !important;
+}
+
+.footer-about p a {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Hover states */
+.footer-links ul li a:hover {
+  color: var(--primary-color) !important;
+}
+
+.footer-contact ul li a:hover {
+  color: var(--primary-color) !important;
+}
+
+.footer-about p a:hover {
+  color: var(--accent-color) !important;
+}
+
+/* Asegurar que los links no tengan underline azul */
+a {
+  color: inherit;
+}
+
+.footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Específico para los links del footer */
+.footer-links a,
+.footer-contact a,
+.footer-about a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none !important;
+  transition: var(--transition);
+}
+
+.footer-links a:visited,
+.footer-contact a:visited,
+.footer-about a:visited {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* Dark Mode Toggle */
 .dark-mode-toggle {
@@ -1205,4 +1560,70 @@ a:focus, a:active {
         border: none !important;
         outline: none !important;
     }
+}
+
+/* Animación de escala entrada */
+@keyframes scaleIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* ===== Sección de Video ===== */
+
+.video-section {
+  background-color: var(--light-color);
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* Mantiene proporción 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.video-container:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: var(--border-radius);
+}
+
+/* Responsive para tablet */
+@media (max-width: 1024px) {
+  .video-container {
+    padding-bottom: 56.25%;
+  }
+}
+
+/* Responsive para mobile */
+@media (max-width: 768px) {
+  .video-container {
+    padding-bottom: 56.25%;
+  }
+  
+  .video-section .section-title {
+    font-size: 1.8rem;
+  }
 }

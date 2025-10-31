@@ -46,7 +46,7 @@ if(hamburger && navList) {
         
         if(!typingText || !cursor) return;
         
-        const words = ["Kexing", "Portafolio", "Desarrolladora", "Creadora", "Programadora"];
+        const words = ["Kexing", "Desarrolladora", "Creadora", "Programadora"];
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
@@ -188,64 +188,173 @@ if(hamburger && navList) {
     const initMiniGame = () => {
     const gameTrigger = document.getElementById('game-trigger');
     const miniGame = document.querySelector('.mini-game');
-    
+    let gameActive = false; // Flag para saber si el juego está activo
+    let clickedGameTarget = false; // Flag para saber si se hizo click en un objetivo
+
     if(!gameTrigger || !miniGame) return;
 
     gameTrigger.addEventListener('click', (e) => {
-        e.stopPropagation(); // Evitar que el click se propague
+        e.stopPropagation();
         miniGame.style.display = miniGame.style.display === 'block' ? 'none' : 'block';
-        if(miniGame.style.display === 'block') startGame();
+        gameActive = miniGame.style.display === 'block';
+        if(gameActive) startGame();
     });
 
     // Cerrar al hacer click fuera
     document.addEventListener('click', (e) => {
-        if(miniGame.style.display === 'block' && 
+        // Solo cerrar si:
+        // 1. El juego está visible
+        // 2. El click NO fue en el modal del juego
+        // 3. El click NO fue en el botón trigger
+        // 4. El click NO fue en un objetivo del juego (clickedGameTarget = false)
+        if(gameActive && 
            !e.target.closest('.mini-game') && 
-           !e.target.closest('#game-trigger')) {
+           !e.target.closest('#game-trigger') &&
+           !clickedGameTarget) {
             miniGame.style.display = 'none';
+            gameActive = false;
         }
+        clickedGameTarget = false; // Reset el flag después de cada click
     });
 
-        function startGame() {
-            const gameArea = document.querySelector('.game-area');
-            const gameScore = document.querySelector('.game-score span');
-            let score = 0;
-            
-            gameArea.innerHTML = '';
-            gameScore.textContent = score;
+    function startGame() {
+        const gameArea = document.querySelector('.game-area');
+        const gameScore = document.querySelector('.game-score span');
+        let score = 0;
 
-            function createTarget() {
-                const target = document.createElement('div');
-                target.className = 'game-target';
-                target.innerHTML = '<i class="fab fa-js"></i>';
-                
-                // Posición aleatoria
-                const maxX = gameArea.offsetWidth - 40;
-                const maxY = gameArea.offsetHeight - 40;
-                const x = Math.random() * maxX;
-                const y = Math.random() * maxY;
-                
-                target.style.left = `${x}px`;
-                target.style.top = `${y}px`;
-                
-                target.addEventListener('click', () => {
-                    score++;
-                    gameScore.textContent = score;
-                    target.remove();
-                    createTarget();
-                });
-                
-                gameArea.appendChild(target);
-            }
-            
-            // Crear objetivos iniciales
-            for(let i = 0; i < 5; i++) {
+        gameArea.innerHTML = '';
+        gameScore.textContent = score;
+
+        function createTarget() {
+            const target = document.createElement('div');
+            target.className = 'game-target';
+            target.innerHTML = '<i class="fab fa-js"></i>';
+
+            // Posición aleatoria
+            const maxX = gameArea.offsetWidth - 40;
+            const maxY = gameArea.offsetHeight - 40;
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+
+            target.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                clickedGameTarget = true;
+                score++;
+                gameScore.textContent = score;
+
+                // Verificar si ganó (20 puntos)
+                if(score >= 20) {
+                    endGame(true);
+                    return;
+                }
+
+                target.remove();
                 createTarget();
-            }
-        }
-    };
+    
 
-    initMiniGame();
+        function endGame(won) {
+            gameArea.innerHTML = '';
+
+            const winContainer = document.createElement('div');
+            winContainer.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 48px;
+                font-weight: bold;
+                color: #6c5ce7;
+                text-shadow: 0 0 20px rgba(108, 92, 231, 0.8);
+                z-index: 1000;
+                animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            `;
+            winContainer.textContent = won ? '¡Ganaste! / You Won!' : 'Game Over';
+            miniGame.appendChild(winContainer);
+
+            createFireworks();
+
+            setTimeout(() => {
+                gameArea.innerHTML = '';
+                startGame();
+            }, 3000);
+        }
+
+        function createFireworks() {
+            const colors = ['#6c5ce7', '#fd79a8', '#00cec9', '#fdcb6e', '#74b9ff'];
+
+            function createParticle(x, y) {
+                const particle = document.createElement('div');
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                particle.style.cssText = `
+                    position: fixed;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: 10px;
+                    height: 10px;
+                    background: ${color};
+                    border-radius: 50%;
+                    pointer-events: none;
+                    box-shadow: 0 0 10px ${color};
+                `;
+
+                document.body.appendChild(particle);
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 8 + 4;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                let opacity = 1;
+
+                let px = x;
+                let py = y;
+
+                const animate = () => {
+                    px += vx;
+                    py += vy;
+                    opacity -= 0.02;
+
+                    particle.style.left = px + 'px';
+                    particle.style.top = py + 'px';
+                    particle.style.opacity = opacity;
+
+                    if(opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        particle.remove();
+                    }
+                };
+
+                animate();
+            }
+
+            for(let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const x = window.innerWidth / 2 + (Math.random() - 0.5) * 200;
+                    const y = window.innerHeight / 2 + (Math.random() - 0.5) * 200;
+
+                    for(let j = 0; j < 15; j++) {
+                        createParticle(x, y);
+                    }
+                }, i * 50);
+            }
+        }        });
+
+            gameArea.appendChild(target);
+        }
+
+        // Crear objetivos iniciales
+        for(let i = 0; i < 5; i++) {
+            createTarget();
+        }
+    }
+};
+
+initMiniGame();
 
     // ===== Scroll Suave y Navegación Activa =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -372,6 +481,3 @@ function updateActiveNav() {
         yearElement.textContent = new Date().getFullYear();
     }
 });
-
-
-
